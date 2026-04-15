@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order</title>
+</head>
+
+<body style="font-family: Arial; text-align:center;">
+
+<h2>Place Order 🍫</h2>
+
+<form id="orderForm">
+
+<input name="Name" placeholder="Name" required><br><br>
+<input name="Email" placeholder="Email" required><br><br>
+<input name="Phone" placeholder="Phone" required><br><br>
+<input name="Alternate Number" placeholder="Alternate Number"><br><br>
+<input name="City" placeholder="City" required><br><br>
+
+<textarea name="Full Address" placeholder="Full Address" required></textarea><br><br>
+
+<select name="Product">
+<option>Chocolate Bars</option>
+<option>Gift Box</option>
+<option>Custom Order</option>
+</select><br><br>
+
+<input name="Amount" placeholder="Amount" required><br><br>
+
+<input name="Referral Code" placeholder="Referral Code"><br><br>
+
+<button type="submit">Submit Order</button>
+
+</form>
+
+<script>
+document.getElementById("orderForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+
+  fetch("YOUR_WEB_APP_URL", {
+    method: "POST",
+    body: formData
+  })
+  .then(() => {
+    alert("Order submitted!");
+    window.location.href = "https://wa.me/message/DCNCEYIC7RBAD1";
+  });
+});
+</script>
+
+</body>
+</html>
