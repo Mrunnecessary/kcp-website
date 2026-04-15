@@ -28,6 +28,10 @@
 
 <input name="Referral Code" placeholder="Referral Code"><br><br>
 
+<p style="color:red;">
+⚠ By placing order, you agree to our Terms & Conditions
+</p>
+
 <button type="submit">Submit Order</button>
 
 </form>
@@ -38,7 +42,7 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
 
   const formData = new FormData(this);
 
-  fetch("YOUR_WEB_APP_URL", {
+  fetch("https://script.google.com/macros/s/AKfycbyk4FAR1PmRJX19T7sh7TNwXZEELLzeaZtY5JvqkgiTmbRou5aArAMNH5fsrcxShdQx0Q/exec", {
     method: "POST",
     body: formData
   })
