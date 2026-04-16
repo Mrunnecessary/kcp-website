@@ -37,19 +37,19 @@
 </form>
 
 <script>
-document.querySelector("form").addEventListener("submit", function(e) {
+document.querySelector("#orderForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
   const data = {
-    name: document.querySelector("input[name='name']").value,
-    email: document.querySelector("input[name='email']").value,
-    phone: document.querySelector("input[name='phone']").value,
-    altPhone: document.querySelector("input[name='altPhone']").value,
-    city: document.querySelector("input[name='city']").value,
-    address: document.querySelector("textarea[name='address']").value,
-    product: document.querySelector("select[name='product']").value,
-    amount: document.querySelector("input[name='amount']").value,
-    referral: document.querySelector("input[name='referral']").value
+    name: document.querySelector("input[name='Name']").value,
+    email: document.querySelector("input[name='Email']").value,
+    phone: document.querySelector("input[name='Phone']").value,
+    altPhone: document.querySelector("input[name='Alternate Number']").value,
+    city: document.querySelector("input[name='City']").value,
+    address: document.querySelector("textarea[name='Full Address']").value,
+    product: document.querySelector("select[name='Product']").value,
+    amount: document.querySelector("input[name='Amount']").value,
+    referral: document.querySelector("input[name='Referral Code']").value
   };
 
   fetch("https://script.google.com/macros/s/AKfycbzZ4WVcly57YDNQwDDjdK7R4zBvg0l6N4CShAgT-lyvDJKdCHVcps1E-aieFDQeLAt5cQ/exec", {
@@ -63,7 +63,6 @@ document.querySelector("form").addEventListener("submit", function(e) {
   .then(response => {
     if (response.status === "success") {
       alert("Order placed successfully! 🎉 Check email for payment link.");
-
       window.open("https://wa.me/917003143525?text=Hi%20I%20just%20placed%20an%20order", "_blank");
     } else {
       alert("Error submitting order");
@@ -74,6 +73,7 @@ document.querySelector("form").addEventListener("submit", function(e) {
     alert("Submission failed. Please try again.");
   });
 });
+</script>
 
 </body>
 </html>
