@@ -52,7 +52,7 @@ document.querySelector("form").addEventListener("submit", function(e) {
     referral: document.querySelector("input[name='referral']").value
   };
 
-  fetch("YOUR_SCRIPT_EXEC_URL", {
+  fetch("https://script.google.com/macros/s/AKfycbzZ4WVcly57YDNQwDDjdK7R4zBvg0l6N4CShAgT-lyvDJKdCHVcps1E-aieFDQeLAt5cQ/exec", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
