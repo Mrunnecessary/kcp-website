@@ -42,13 +42,14 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
 
   const formData = new FormData(this);
 
-  fetch("https://script.google.com/macros/s/AKfycbyPH3kF_8Fh8iUMcesniNCtjfbycSIYBHbDa38QZ9BOMQtm_HJtSqd_tDF7_bewz6JUQg/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbzZ4WVcly57YDNQwDDjdK7R4zBvg0l6N4CShAgT-lyvDJKdCHVcps1E-aieFDQeLAt5cQ/exec", {
     method: "POST",
     body: formData
   })
   .then(() => {
-    alert("Order submitted!");
-    window.location.href = "https://wa.me/message/DCNCEYIC7RBAD1";
+    alert("Order placed successfully! 🎉 Check email for payment link.");
+
+window.open("https://wa.me/...", "_blank");
   });
 });
 </script>
