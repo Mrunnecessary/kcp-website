@@ -37,41 +37,34 @@
 </form>
 
 <script>
-document.querySelector("#orderForm").addEventListener("submit", function(e) {
+document.getElementById("orderForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
+  console.log("Form submitted ✅");
+
   const data = {
-    name: document.querySelector("input[name='Name']").value,
-    email: document.querySelector("input[name='Email']").value,
-    phone: document.querySelector("input[name='Phone']").value,
-    altPhone: document.querySelector("input[name='Alternate Number']").value,
-    city: document.querySelector("input[name='City']").value,
-    address: document.querySelector("textarea[name='Full Address']").value,
-    product: document.querySelector("select[name='Product']").value,
-    amount: document.querySelector("input[name='Amount']").value,
-    referral: document.querySelector("input[name='Referral Code']").value
+    name: document.querySelector("[name='name']").value,
+    email: document.querySelector("[name='email']").value,
+    phone: document.querySelector("[name='phone']").value,
+    altPhone: document.querySelector("[name='altPhone']").value,
+    city: document.querySelector("[name='city']").value,
+    address: document.querySelector("[name='address']").value,
+    product: document.querySelector("[name='product']").value,
+    amount: document.querySelector("[name='amount']").value,
+    referral: document.querySelector("[name='referral']").value
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbzZ4WVcly57YDNQwDDjdK7R4zBvg0l6N4CShAgT-lyvDJKdCHVcps1E-aieFDQeLAt5cQ/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbzFa8AOdDQ0k2T8hquX_a8tM3tSrH8vJyc63Qq_LaZdyB4Dz13t9O7dFJAbpl1xkfD2Ug/exec", {
     method: "POST",
-    body: JSON.stringify(data),
+    mode: "no-cors",   // ⭐ VERY IMPORTANT
     headers: {
       "Content-Type": "application/json"
-    }
-  })
-  .then(res => res.json())
-  .then(response => {
-    if (response.status === "success") {
-      alert("Order placed successfully! 🎉 Check email for payment link.");
-      window.open("https://wa.me/917003143525?text=Hi%20I%20just%20placed%20an%20order", "_blank");
-    } else {
-      alert("Error submitting order");
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Submission failed. Please try again.");
+    },
+    body: JSON.stringify(data)
   });
+
+  alert("Order placed successfully! 🎉 Check email for payment link.");
+
 });
 </script>
 
