@@ -10,23 +10,20 @@
 
 <form id="orderForm">
 
-<input name="Name" placeholder="Name" required><br><br>
-<input name="Email" placeholder="Email" required><br><br>
-<input name="Phone" placeholder="Phone" required><br><br>
-<input name="Alternate Number" placeholder="Alternate Number"><br><br>
-<input name="City" placeholder="City" required><br><br>
+<input type="text" name="name" placeholder="Name" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="text" name="phone" placeholder="Phone" required>
+<input type="text" name="altPhone" placeholder="Alternate Number">
+<input type="text" name="city" placeholder="City">
+<textarea name="address" placeholder="Full Address"></textarea>
 
-<textarea name="Full Address" placeholder="Full Address" required></textarea><br><br>
+<select name="product">
+  <option value="Chocolate Bars">Chocolate Bars</option>
+  <option value="Gift Box">Gift Box</option>
+</select>
 
-<select name="Product">
-<option>Chocolate Bars</option>
-<option>Gift Box</option>
-<option>Custom Order</option>
-</select><br><br>
-
-<input name="Amount" placeholder="Amount" required><br><br>
-
-<input name="Referral Code" placeholder="Referral Code"><br><br>
+<input type="number" name="amount" placeholder="Amount">
+<input type="text" name="referral" placeholder="Referral Code">
 
 <p style="color:red;">
 ⚠ By placing order, you agree to our Terms & Conditions
