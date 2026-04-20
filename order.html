@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order — Kolkata Cocoa Parlor</title>
   <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75B05CCT4K"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag("js", new Date());
-    gtag("config", "G-XXXXXXXXXX");
+    gtag("config", "G-75B05CCT4K");
     function trackEvent(action, category, label){
       gtag("event", action, {event_category: category, event_label: label});
     }
@@ -376,7 +376,7 @@
         address:addr,orderSummary:summ,
         product:document.getElementById("product").value,
         amount:amt,referral:refVal,myRefCode:custRef};
-      fetch("https://script.google.com/macros/s/AKfycbydFDPL7YObj3jcAvUc5OyEQFr4z6qArYqY9irY-hlCXx4hV-VURkgIgzIWPXanLpNMqA/exec",{
+      fetch("https://script.google.com/macros/s/AKfycbydFDPL7YObj3jcAvUc5OyEQFr4z6qArYqY9irY-hlCXx4hV-VURkgIgzIWPXanLpNMqA/execgtag",{
         method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},
         body:JSON.stringify(data)
       }).then(function(){showSuccess();}).catch(function(){showSuccess();});
