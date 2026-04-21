@@ -342,7 +342,7 @@
         address:addr,orderSummary:summ,
         product:document.getElementById("product").value,
         amount:amt,referral:refVal,myRefCode:custRef};
-      fetch("https://script.google.com/macros/s/AKfycbydFDPL7YObj3jcAvUc5OyEQFr4z6qArYqY9irY-hlCXx4hV-VURkgIgzIWPXanLpNMqA/exec",{method:"POST",mode:"no-cors",
+      fetch("https://script.google.com/macros/s/AKfycbyHWbOIgnhgkUG1quduBBt5XMRT4TWDR-dBkO457-kWPQcSmcrJwwinIW3OHBRoAEHDgg/exec",{method:"POST",mode:"no-cors",
         headers:{"Content-Type":"application/json"},body:JSON.stringify(data)
       }).then(function(){showSuccess();}).catch(function(){showSuccess();});
     }
