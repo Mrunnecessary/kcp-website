@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=https://script.google.com/macros/s/AKfycby0clXQEDqlX098DYW5k_ON7EhL6uhKyjOAD-QgNUTgiysvAHk6NWEt9i4o5WuJJdE5/exec">
-  <script>window.location.replace("https://script.google.com/macros/s/AKfycby0clXQEDqlX098DYW5k_ON7EhL6uhKyjOAD-QgNUTgiysvAHk6NWEt9i4o5WuJJdE5/exec");</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KCP – Place Your Order</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -286,6 +284,70 @@
       .card-body { padding: 20px 16px; }
       .row2 { grid-template-columns: 1fr; }
     }
+
+
+    .field-err {
+      display: block;
+      color: #c0392b;
+      font-size: .72rem;
+      margin-top: 4px;
+      font-weight: 500;
+      min-height: 0;
+    }
+    .err-banner {
+      background: #fdecea;
+      border: 1.5px solid #e74c3c;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #c0392b;
+      font-size: .83rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+
+    .btn-whatsapp {
+      width: 100%;
+      background: #25D366;
+      color: #fff;
+      font-family: "DM Sans", sans-serif;
+      font-size: .95rem; font-weight: 600;
+      padding: 13px; border-radius: 100px;
+      border: none; cursor: pointer;
+      margin-bottom: 10px;
+      transition: all .25s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-whatsapp:hover { background: #1ebe57; transform: translateY(-1px); }
+
+    /* ── Toast notification ── */
+    #toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: #2C1A0E;
+      color: #FDF6EC;
+      padding: 16px 28px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 12px 40px rgba(0,0,0,.45);
+      z-index: 9999;
+      transition: transform .35s cubic-bezier(.175,.885,.32,1.275), opacity .35s ease;
+      opacity: 0;
+      white-space: pre-wrap;
+      max-width: 88vw;
+      text-align: center;
+      line-height: 1.4;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    #toast.error { background: #c0392b; }
+    #toast.success { background: #27ae60; }
   </style>
 </head>
 <body>
@@ -324,7 +386,8 @@
       <div class="row2">
         <div class="fg">
           <label class="fl">Phone <span class="req">*</span></label>
-          <input type="tel" id="phone" placeholder="10-digit number" autocomplete="tel">
+          <input type="tel" id="phone" placeholder="10-digit number" autocomplete="tel" oninput="clearErr('phoneErr')">
+        <span class="field-err" id="phoneErr"></span>
         </div>
         <div class="fg">
           <label class="fl">Alternate Phone</label>
@@ -377,6 +440,7 @@
         </div>
       </div>
 
+      <div class="err-banner" id="errBanner" style="display:none;"></div>
       <button class="btn-primary" id="submitBtn" onclick="submitOrder()">
         🎁 Check My Discount &amp; Proceed
       </button>
@@ -409,13 +473,14 @@
       </div>
 
       <!-- Final amount -->
-      <div class="amount-box">
+      <div class="amount-box" id="amountBox" style="display:none;">
         <div class="amount-lbl">💰 Your Final Amount to Pay</div>
         <div class="amount-val" id="finalAmtDisplay">₹0</div>
         <div class="amount-break" id="amtBreakdown"></div>
       </div>
 
       <!-- UPI payment -->
+      <div id="paymentSection" style="display:none;">
       <div class="upi-box">
         <div class="upi-lbl">Pay via UPI to</div>
         <div class="upi-id" id="upiIdDisplay">loading…</div>
@@ -430,12 +495,16 @@
           <input type="number" id="amountPaid" placeholder="Enter exact amount paid" min="1">
         </div>
         <div class="fg">
-          <label class="fl">Payment Screenshot (Google Drive link) <span class="req">*</span></label>
-          <input type="url" id="ssLink" placeholder="Paste your Google Drive share link">
-          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">
-            📂 Upload screenshot to Google Drive → Share (Anyone with link) → Copy link → paste here
+          <label class="fl">Payment Screenshot <span class="req">*</span></label>
+          <div style="background:var(--blush);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-size:.78rem;color:var(--muted);line-height:1.6;">
+            📸 Take a screenshot of your payment → tap the button below to send it directly to us on WhatsApp along with your Order ID.
           </div>
+          <!-- Hidden field so submitProof still gets a value -->
+          <input type="hidden" id="ssLink" value="via-whatsapp">
         </div>
+        <button type="button" class="btn-whatsapp" id="waBtn" onclick="sendViaWhatsApp()">
+          💬 Send Screenshot on WhatsApp
+        </button>
       </div>
 
       <button class="btn-green" id="proofBtn" onclick="submitProof()">
@@ -444,12 +513,41 @@
       <div class="spinner" id="spinner2">⏳ Submitting…</div>
     </div>
 
+      </div><!-- /paymentSection -->
+
     <!-- ═══ PHASE 3: SUCCESS ═══════════════════════════════ -->
     <div class="success-box" id="successBox">
       <div style="font-size:2.5rem;margin-bottom:12px;">🎉</div>
       <h3>Order Placed Successfully!</h3>
-      <p id="successDetails"></p>
-      <p style="margin-top:10px;font-size:.75rem;color:#555;">
+
+      <!-- Soft Invoice -->
+      <div id="invoiceBox" style="background:#fff;border:1.5px dashed #D4A853;border-radius:14px;padding:20px;margin:18px 0;text-align:left;font-size:.82rem;line-height:1.9;">
+        <div style="text-align:center;margin-bottom:12px;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#2C1A0E;">🍫 Kolkata Cocoa Parlor</div>
+          <div style="font-size:.7rem;color:#8A6347;">Order Confirmation · Soft Invoice</div>
+          <div style="border-top:1px dashed #D4A853;margin:10px 0;"></div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:.8rem;">
+          <tr><td style="color:#8A6347;padding:2px 0;">Order ID</td><td style="text-align:right;font-weight:600;" id="inv_orderId">—</td></tr>
+          <tr><td style="color:#8A6347;padding:2px 0;">Date</td><td style="text-align:right;" id="inv_date">—</td></tr>
+          <tr><td style="color:#8A6347;padding:2px 0;">Customer</td><td style="text-align:right;" id="inv_name">—</td></tr>
+          <tr><td style="color:#8A6347;padding:2px 0;">Product</td><td style="text-align:right;" id="inv_product">—</td></tr>
+          <tr><td colspan="2"><div style="border-top:1px dashed #D4A853;margin:8px 0;"></div></td></tr>
+          <tr><td style="color:#8A6347;padding:2px 0;">Base Amount</td><td style="text-align:right;" id="inv_base">—</td></tr>
+          <tr id="inv_discRow"><td style="color:#27ae60;padding:2px 0;" id="inv_discLabel">Discount</td><td style="text-align:right;color:#27ae60;" id="inv_disc">—</td></tr>
+          <tr><td colspan="2"><div style="border-top:1px dashed #D4A853;margin:8px 0;"></div></td></tr>
+          <tr>
+            <td style="font-weight:700;color:#2C1A0E;font-size:.9rem;">Final Amount</td>
+            <td style="text-align:right;font-weight:700;color:#2C1A0E;font-size:.9rem;" id="inv_final">—</td>
+          </tr>
+        </table>
+        <div style="border-top:1px dashed #D4A853;margin:10px 0;"></div>
+        <div style="text-align:center;font-size:.7rem;color:#8A6347;">Payment pending verification · Dispatch in 10+ days<br>Keep this Order ID for reference.</div>
+      </div>
+
+      <button onclick="printInvoice()" style="background:var(--cocoa);color:var(--cream);border:none;border-radius:9px;padding:10px 24px;font-size:.82rem;cursor:pointer;margin-bottom:12px;">🖨️ Save / Print Invoice</button>
+
+      <p style="margin-top:4px;font-size:.75rem;color:#555;">
         We'll verify your payment and start preparing your chocolates.<br>
         You'll receive an email when your order is dispatched.
       </p>
@@ -462,10 +560,45 @@
 </div><!-- /card -->
 
 <script>
+
+  // ── Toast helper (replaces all alert() calls) ────────────
+  var toastTimer = null;
+  function showToast(msg, type) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'show ' + (type || 'error');
+    clearTimeout(toastTimer);
+    // Errors stay longer (5s), success shorter (3.5s)
+    var dur = (type === 'error') ? 5000 : 3500;
+    toastTimer = setTimeout(function() {
+      t.className = t.className.replace('show', '').trim();
+    }, dur);
+  }
+
+
+  function showErr(msg) {
+    // Toast popup — always visible regardless of scroll position
+    showToast('⚠ ' + msg, 'error');
+    // Also update banner for reference
+    var b = document.getElementById('errBanner');
+    if (b) { b.textContent = '⚠ ' + msg; b.style.display = 'block'; b.scrollIntoView({behavior:'smooth', block:'nearest'}); }
+  }
+  function showFieldErr(id, msg) {
+    var el = document.getElementById(id);
+    if (el) { el.textContent = msg; }
+  }
+  function clearErr(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = '';
+    var b = document.getElementById('errBanner');
+    if (b) b.style.display = 'none';
+  }
+
   // ── State ────────────────────────────────────────────────
-  var orderResult  = null;
-  var tcChecked    = false;
-  var scratchSetup = false;
+  var orderResult   = null;
+  var tcChecked     = false;
+  var scratchSetup  = false;
+  var whatsappSent  = false;  // tracks if WhatsApp proof was sent
 
   // ── TC toggle ────────────────────────────────────────────
   function toggleTC() {
@@ -486,6 +619,8 @@
   function submitOrder() {
     var name    = document.getElementById('name').value.trim();
     var phone   = document.getElementById('phone').value.trim();
+    // Strip +91, 91, or leading 0 to get the 10-digit number
+    phone = phone.replace(/^\+91/, '').replace(/^91(?=\d{10}$)/, '').replace(/^0/, '');
     var city    = document.getElementById('city').value.trim();
     var address = document.getElementById('address').value.trim();
     var product = document.getElementById('product').value.trim();
@@ -493,25 +628,26 @@
     var amount  = document.getElementById('amount').value.trim();
 
     if (!name || !phone || !city || !address || !product || !amount) {
-      alert('Please fill in all required fields (marked with *).');
+      showErr('Please fill in all required fields marked with *'); return;
       return;
     }
     if (!/^\d{10}$/.test(phone)) {
-      alert('Please enter a valid 10-digit phone number.');
+      showFieldErr('phoneErr', 'Enter a valid 10-digit number (without +91)'); showErr('Check your phone number'); return;
       return;
     }
     if (!tcChecked) {
-      alert('Please read and accept the Terms & Conditions to proceed.');
+      showErr('Please accept the Terms & Conditions to proceed'); return;
       return;
     }
 
+    var b = document.getElementById('errBanner'); if(b) b.style.display='none';
     document.getElementById('submitBtn').disabled = true;
     document.getElementById('spinner').style.display = 'block';
 
     google.script.run
       .withSuccessHandler(onOrderResult)
       .withFailureHandler(function(err) {
-        alert('Error submitting order: ' + err.message);
+        showToast('Submission error — please try again', 'error');
         document.getElementById('submitBtn').disabled = false;
         document.getElementById('spinner').style.display = 'none';
       })
@@ -533,7 +669,7 @@
     document.getElementById('spinner').style.display = 'none';
 
     if (!res.success) {
-      alert('Something went wrong: ' + (res.error || 'Unknown error'));
+      showToast('Something went wrong — please try again', 'error');
       document.getElementById('submitBtn').disabled = false;
       return;
     }
@@ -551,7 +687,9 @@
     // Loyalty badge
     if (res.loyaltyEligible) {
       document.getElementById('loyaltyBadge').style.display = 'flex';
+      // Loyalty users still must scratch to reveal amount
     }
+    // amountBox and paymentSection stay hidden for ALL users until scratch is revealed
 
     // Scratch card content
     // ONLY rule: loyalty users → BLN (they get 10% loyalty instead)
@@ -648,6 +786,9 @@
           hint.textContent = '🎉 Revealed! Check your discount below.';
           hint.classList.add('done');
           setStep(3);
+          document.getElementById('amountBox').style.display = 'block';
+          document.getElementById('paymentSection').style.display = 'block';
+          document.getElementById('amountBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
     }
@@ -665,20 +806,50 @@
   function copyUPI() {
     var upi = document.getElementById('upiIdDisplay').textContent;
     navigator.clipboard.writeText(upi)
-      .then(function() { alert('✅ Copied: ' + upi); })
-      .catch(function() { alert('UPI ID: ' + upi); });
+      .then(function() { showToast('UPI ID copied! ✅', 'success'); })
+      .catch(function() { showToast('UPI: ' + upi, 'success'); });
   }
+
+// ── SEND SCREENSHOT VIA WHATSAPP ─────────────────────────
+function sendViaWhatsApp() {
+  var paid     = document.getElementById('amountPaid').value.trim();
+  var orderId  = orderResult ? orderResult.orderId : 'UNKNOWN';
+  var name     = document.getElementById('name').value.trim();
+  var base     = orderResult ? orderResult.baseAmount : '';
+  var finalAmt = orderResult ? orderResult.finalAmount : '';
+  var disc     = orderResult ? (orderResult.baseAmount - orderResult.finalAmount) : 0;
+  var discLabel= orderResult ? orderResult.discountLabel : '';
+
+  if (!paid) { showToast('Please enter the amount you paid first', 'error'); return; }
+
+  var msg = '🍫 *Payment Proof — Kolkata Cocoa Parlor*\n\n'
+    + '👤 Customer: *' + name + '*\n'
+    + '🆔 Order ID: *' + orderId + '*\n\n'
+    + '💰 Amount Details:\n'
+    + '   Base Amount:  ₹' + base + '\n'
+    + (disc > 0
+        ? '   Reward/Discount: -₹' + disc + ' (' + discLabel + ')\n'
+        : '   Discount: No discount this time\n')
+    + '   Final Amount: ₹' + finalAmt + '\n'
+    + '   Amount Paid:  ₹' + paid + '\n\n'
+    + '📸 Screenshot attached below ↓';
+
+  var waUrl = 'https://wa.me/917003143525?text=' + encodeURIComponent(msg);
+  window.open(waUrl, '_blank');
+
+  whatsappSent = true;
+  var btn = document.getElementById('waBtn');
+  btn.textContent = '✅ Screenshot Sent on WhatsApp';
+  btn.style.background = '#1e8449';
+}
 
   // ── SUBMIT PROOF ─────────────────────────────────────────
   function submitProof() {
     var paid   = document.getElementById('amountPaid').value.trim();
     var ssLink = document.getElementById('ssLink').value.trim();
 
-    if (!paid)   { alert('Please enter the amount you paid.'); return; }
-    if (!ssLink) { alert('Please paste your Google Drive screenshot link.'); return; }
-    if (!ssLink.startsWith('http')) {
-      alert('Please paste a valid Google Drive link (starts with https://).'); return;
-    }
+    if (!paid) { showErr('Please enter the amount you paid'); return; }
+    if (!whatsappSent) { showErr('Please send your payment screenshot on WhatsApp first'); return; }
 
     document.getElementById('proofBtn').disabled = true;
     document.getElementById('proofBtn').textContent = '⏳ Submitting…';
@@ -687,7 +858,7 @@
     google.script.run
       .withSuccessHandler(onProofResult)
       .withFailureHandler(function(err) {
-        alert('Error submitting proof: ' + err.message);
+        showToast('Submission error — please try again', 'error');
         document.getElementById('proofBtn').disabled = false;
         document.getElementById('proofBtn').textContent = '✅ Submit Payment Proof';
         document.getElementById('spinner2').style.display = 'none';
@@ -699,26 +870,41 @@
   function onProofResult(res) {
     document.getElementById('spinner2').style.display = 'none';
     if (!res.success) {
-      alert('Error: ' + (res.error || 'Please contact us on WhatsApp.'));
+      showToast('Error — please contact us on WhatsApp', 'error');
       document.getElementById('proofBtn').disabled = false;
       document.getElementById('proofBtn').textContent = '✅ Submit Payment Proof';
       return;
     }
 
-    // Hide everything, show success
     document.getElementById('phase1').style.display = 'none';
     document.getElementById('phase2').style.display = 'none';
 
+    // Populate invoice
+    var disc = orderResult.baseAmount - orderResult.finalAmount;
+    document.getElementById('inv_orderId').textContent  = orderResult.orderId;
+    document.getElementById('inv_date').textContent     = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    document.getElementById('inv_name').textContent     = document.getElementById('name').value.trim();
+    document.getElementById('inv_product').textContent  = document.getElementById('product').value.trim();
+    document.getElementById('inv_base').textContent     = '₹' + orderResult.baseAmount;
+    document.getElementById('inv_final').textContent    = '₹' + orderResult.finalAmount;
+    if (disc > 0) {
+      document.getElementById('inv_discLabel').textContent = orderResult.discountLabel;
+      document.getElementById('inv_disc').textContent      = '− ₹' + disc;
+    } else {
+      document.getElementById('inv_discRow').style.display = 'none';
+    }
+
     var box = document.getElementById('successBox');
     box.style.display = 'block';
-    document.getElementById('successDetails').innerHTML =
-      'Order ID: <span class="order-id">' + orderResult.orderId + '</span><br>' +
-      'Final Amount: ₹' + orderResult.finalAmount + '<br><br>' +
-      'Your payment screenshot has been sent to us for verification.';
-
     setStep(4);
     box.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
+  function printInvoice() {
+    window.print();
+  }
 </script>
+
+<div id="toast"></div>
 </body>
 </html>
