@@ -212,6 +212,13 @@
 
     .photo-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(212,168,83,.6);pointer-events:none;}
   </style>
+  <!-- ══ ORDER FORM URL — change only this one line ══════════ -->
+  <script>
+    var ORDER_URL = 'https://script.google.com/macros/s/AKfycbz9mg6FbWLxericztTUjOrXUIHYg8TTr5ggQ5hezqeyt7e71ne4XCIKzDyV-9EkZ4Mpfw/exec';
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.order-btn').forEach(function(a) { a.href = ORDER_URL; });
+    });
+  </script>
 </head>
 <body>
   <nav>
@@ -227,7 +234,7 @@
       <li><a href="contact.html">Contact</a></li>
       <li><a href="privacy.html">Privacy</a></li>
       <li><a href="terms.html">Terms</a></li>
-      <li><a href="https://script.google.com/macros/s/AKfycbzs_yuHP3EgqZZKEH8cN6pslmNM9nrfzSfyMqZZy2OEwoG6_R588hdajEHdIldv-5Pq/exec" class="nav-cta">Order Now</a></li>
+      <li><a href="#" class="order-btn nav-cta">Order Now</a></li>
     </ul>
   </nav>
 
@@ -239,7 +246,7 @@
       <h1 class="hero-title">Handmade <em>Chocolates</em><br>from the Heart of Kolkata</h1>
       <p class="hero-subtitle">Each piece crafted with love, no machines — just pure ingredients, careful hands, and passion. Customized gifts for every occasion.</p>
       <div class="hero-actions">
-        <a href="https://script.google.com/macros/s/AKfycbzs_yuHP3EgqZZKEH8cN6pslmNM9nrfzSfyMqZZy2OEwoG6_R588hdajEHdIldv-5Pq/exec" class="btn-primary">🍫 Order Now</a>
+        <a href="#" class="order-btn btn-primary">🍫 Order Now</a>
         <a href="reviews.html" class="btn-secondary">⭐ Read Reviews</a>
       </div>
     </div>
@@ -295,7 +302,7 @@
       </div>
     </div>
     <p style="color:var(--muted);font-size:.9rem;margin-bottom:24px;font-weight:300;">Chat with us on WhatsApp first to finalise your flavours and quantity — then place your order.</p>
-    <a href="https://script.google.com/macros/s/AKfycbzs_yuHP3EgqZZKEH8cN6pslmNM9nrfzSfyMqZZy2OEwoG6_R588hdajEHdIldv-5Pq/exec" class="btn-primary">Place Your Order →</a>
+    <a href="#" class="order-btn btn-primary">Place Your Order →</a>
   </section>
 
   <section class="process">
@@ -380,7 +387,7 @@
       <!-- ▼ PHOTO 1 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo1"
-             src="https://lh3.googleusercontent.com/d/1hUqPn0a2CsO9tlXvQNv6qQLorIYzg4zN"
+             src="photos/photo1.jpg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1hUqPn0a2CsO9tlXvQNv6qQLorIYzg4zN';this.onerror=function(){this.style.display='none';}"
              alt="KCP Chocolate Gift Box"
              style="width:100%;height:100%;object-fit:cover;display:block;"
              onerror="this.style.display='none'">
@@ -390,7 +397,7 @@
       <!-- ▼ PHOTO 2 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo2"
-             src="https://lh3.googleusercontent.com/d/10wCeiFgW24DhoD-8-TmDmLeKzTuvKB17"
+             src="photos/photo2.jpg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/10wCeiFgW24DhoD-8-TmDmLeKzTuvKB17';this.onerror=function(){this.style.display='none';}"
              alt="KCP Chocolate Bars"
              style="width:100%;height:100%;object-fit:cover;display:block;"
              onerror="this.style.display='none'">
@@ -400,7 +407,7 @@
       <!-- ▼ PHOTO 3 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo3"
-             src="https://lh3.googleusercontent.com/d/1qPc8WQvMU6M_D4gfuMbHxgpVTfWb50md"
+             src="photos/photo3.jpeg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1qPc8WQvMU6M_D4gfuMbHxgpVTfWb50md';this.onerror=function(){this.style.display='none';}"
              alt="KCP Custom Chocolates"
              style="width:100%;height:100%;object-fit:cover;display:block;"
              onerror="this.style.display='none'">
@@ -410,7 +417,7 @@
       <!-- ▼ PHOTO 4 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo4"
-             src="https://lh3.googleusercontent.com/d/1zy6EYE3fWUOFg2tv0Q_ZPVR4-X2B_lQ1"
+             src="photos/photo4.jpeg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1zy6EYE3fWUOFg2tv0Q_ZPVR4-X2B_lQ1';this.onerror=function(){this.style.display='none';}"
              alt="KCP Custom Box"
              style="width:100%;height:100%;object-fit:cover;display:block;"
              onerror="this.style.display='none'">
@@ -420,7 +427,7 @@
       <!-- ▼ PHOTO 5 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo5"
-             src="https://lh3.googleusercontent.com/d/1ayoQUkXbkZFmGW_S15antdkApWyje4pg"
+             src="photos/photo5.jpeg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1ayoQUkXbkZFmGW_S15antdkApWyje4pg';this.onerror=function(){this.style.display='none';}"
              alt="KCP Packaging"
              style="width:100%;height:100%;object-fit:cover;display:block;"
              onerror="this.style.display='none'">
@@ -430,7 +437,7 @@
       <!-- ▼ PHOTO 6 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo6"
-             src="https://lh3.googleusercontent.com/d/1LNPo3pTd3FHpd7iMAnperbjf4Wk6TGai"
+             src="photos/photo6.jpeg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1LNPo3pTd3FHpd7iMAnperbjf4Wk6TGai';this.onerror=function(){this.style.display='none';}"
              alt="KCP Happy Customer"
              style="width:100%;height:100%;object-fit:cover;display:block;"
              onerror="this.style.display='none'">
@@ -476,7 +483,7 @@
           <div style="font-size:.72rem;color:rgba(253,246,236,.6);margin-top:4px;">To qualify</div>
         </div>
       </div>
-      <a href="https://script.google.com/macros/s/AKfycbzs_yuHP3EgqZZKEH8cN6pslmNM9nrfzSfyMqZZy2OEwoG6_R588hdajEHdIldv-5Pq/exec"
+      <a href="#" class="order-btn"
          style="display:inline-block;background:var(--gold);color:var(--dark);font-weight:700;font-size:1rem;padding:16px 40px;border-radius:100px;text-decoration:none;letter-spacing:.04em;box-shadow:0 8px 32px rgba(212,168,83,.4);transition:transform .2s,box-shadow .2s;"
          onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px rgba(212,168,83,.5)'"
          onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 32px rgba(212,168,83,.4)'">
@@ -494,7 +501,7 @@
     <div class="section-label" style="color:var(--dark);opacity:.6;">Limited Slots Available</div>
     <h2 class="section-title">Ready for something<br><em style="font-style:italic;">truly handmade?</em></h2>
     <p class="section-desc">Slots fill fast. Place your order before this batch is full.</p>
-    <a href="https://script.google.com/macros/s/AKfycbzs_yuHP3EgqZZKEH8cN6pslmNM9nrfzSfyMqZZy2OEwoG6_R588hdajEHdIldv-5Pq/exec" class="btn-dark">🍫 Order Your Box Now</a>
+    <a href="#" class="order-btn btn-dark">🍫 Order Your Box Now</a>
   </section>
 
   <section class="social-section">
@@ -511,7 +518,7 @@
   <footer>
     <div class="footer-brand">🍫 Kolkata Cocoa Parlor</div>
     <div class="footer-links">
-      <a href="https://script.google.com/macros/s/AKfycbzs_yuHP3EgqZZKEH8cN6pslmNM9nrfzSfyMqZZy2OEwoG6_R588hdajEHdIldv-5Pq/exec">Order</a><a href="reviews.html">Reviews</a>
+      <a href="#" class="order-btn">Order</a><a href="reviews.html">Reviews</a>
       <a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
     </div>
     <div class="footer-copy">© 2025 Kolkata Cocoa Parlor. All rights reserved. Made with 🍫 in Kolkata.</div>
