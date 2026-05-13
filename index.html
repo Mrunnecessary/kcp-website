@@ -212,9 +212,9 @@
 
     .photo-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(212,168,83,.6);pointer-events:none;}
   </style>
-  <!-- ══ ORDER FORM URL — change only this one line ══════════ -->
+  <!-- ══ ORDER FORM URL — update only this one line when you redeploy ══ -->
   <script>
-    var ORDER_URL = 'https://script.google.com/macros/s/AKfycbz9mg6FbWLxericztTUjOrXUIHYg8TTr5ggQ5hezqeyt7e71ne4XCIKzDyV-9EkZ4Mpfw/exec';
+    var ORDER_URL = 'https://script.google.com/macros/s/AKfycbyBFqMP07yUlPOCYTefNOVCxxsK9fEtq07KO0FtujIVKc-etKOj456O-4Ll3bPNl86F/exec';
     document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('a.order-btn').forEach(function(a) { a.href = ORDER_URL; });
     });
@@ -384,64 +384,82 @@
 
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:960px;margin:0 auto 32px;">
 
-      <!-- ▼ PHOTO 1 -->
+      <!-- ▼ PHOTO 1 — replace src value with your image URL -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo1"
-             src="photos/photo1.jpg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1hUqPn0a2CsO9tlXvQNv6qQLorIYzg4zN';this.onerror=function(){this.style.display='none';}"
+             src="photos/photo1.jpg" 
              alt="KCP Chocolate Gift Box"
              style="width:100%;height:100%;object-fit:cover;display:block;"
-             onerror="this.style.display='none'">
-        <div class="photo-placeholder"><div style="font-size:2.2rem;">🎁</div><div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Gift Box</div></div>
+             onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="photo-placeholder">
+          <div style="font-size:2.2rem;">🎁</div>
+          <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Gift Box</div>
+        </div>
       </div>
 
       <!-- ▼ PHOTO 2 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo2"
-             src="photos/photo2.jpg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/10wCeiFgW24DhoD-8-TmDmLeKzTuvKB17';this.onerror=function(){this.style.display='none';}"
+             src="photos/photo2.jpg" 
              alt="KCP Chocolate Bars"
              style="width:100%;height:100%;object-fit:cover;display:block;"
-             onerror="this.style.display='none'">
-        <div class="photo-placeholder"><div style="font-size:2.2rem;">🍫</div><div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Chocolate Bars</div></div>
+             onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="photo-placeholder">
+          <div style="font-size:2.2rem;">🍫</div>
+          <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Chocolate Bars</div>
+        </div>
       </div>
 
       <!-- ▼ PHOTO 3 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo3"
-             src="photos/photo3.jpeg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1qPc8WQvMU6M_D4gfuMbHxgpVTfWb50md';this.onerror=function(){this.style.display='none';}"
+             src="photos/photo3.jpg" 
              alt="KCP Custom Chocolates"
              style="width:100%;height:100%;object-fit:cover;display:block;"
-             onerror="this.style.display='none'">
-        <div class="photo-placeholder"><div style="font-size:2.2rem;">🍭</div><div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Lollipops & Shots</div></div>
+             onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="photo-placeholder">
+          <div style="font-size:2.2rem;">🍭</div>
+          <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Lollipops & Shots</div>
+        </div>
       </div>
 
       <!-- ▼ PHOTO 4 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo4"
-             src="photos/photo4.jpeg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1zy6EYE3fWUOFg2tv0Q_ZPVR4-X2B_lQ1';this.onerror=function(){this.style.display='none';}"
+             src="photos/photo4.jpg" 
              alt="KCP Custom Box"
              style="width:100%;height:100%;object-fit:cover;display:block;"
-             onerror="this.style.display='none'">
-        <div class="photo-placeholder"><div style="font-size:2.2rem;">🎀</div><div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Custom Orders</div></div>
+             onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="photo-placeholder">
+          <div style="font-size:2.2rem;">🎀</div>
+          <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Custom Orders</div>
+        </div>
       </div>
 
       <!-- ▼ PHOTO 5 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo5"
-             src="photos/photo5.jpeg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1ayoQUkXbkZFmGW_S15antdkApWyje4pg';this.onerror=function(){this.style.display='none';}"
+             src="photos/photo5.jpg" 
              alt="KCP Packaging"
              style="width:100%;height:100%;object-fit:cover;display:block;"
-             onerror="this.style.display='none'">
-        <div class="photo-placeholder"><div style="font-size:2.2rem;">🌟</div><div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Packaging</div></div>
+             onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="photo-placeholder">
+          <div style="font-size:2.2rem;">🌟</div>
+          <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Packaging</div>
+        </div>
       </div>
 
       <!-- ▼ PHOTO 6 -->
       <div style="aspect-ratio:1;background:var(--cocoa);border-radius:16px;overflow:hidden;position:relative;">
         <img id="photo6"
-             src="photos/photo6.jpeg" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1LNPo3pTd3FHpd7iMAnperbjf4Wk6TGai';this.onerror=function(){this.style.display='none';}"
+             src="photos/photo6.jpg" 
              alt="KCP Happy Customer"
              style="width:100%;height:100%;object-fit:cover;display:block;"
-             onerror="this.style.display='none'">
-        <div class="photo-placeholder"><div style="font-size:2.2rem;">❤️</div><div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Happy Customers</div></div>
+             onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="photo-placeholder">
+          <div style="font-size:2.2rem;">❤️</div>
+          <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.5;">Happy Customers</div>
+        </div>
       </div>
 
     </div>
@@ -454,47 +472,6 @@
       📸 @kolkatacocoaparlor on Instagram
     </a>
   </section>
-
-  <!-- SCRATCH CARD HOOK BANNER -->
-  <section style="background:linear-gradient(135deg,#2C1A0E 0%,#4a235a 100%);padding:72px 32px;text-align:center;">
-    <div style="max-width:640px;margin:0 auto;">
-      <div style="font-size:3rem;margin-bottom:12px;animation:pulse 1.8s ease-in-out infinite;">🎰</div>
-      <div style="font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Exclusive Offer</div>
-      <h2 style="font-family:'Playfair Display',serif;color:var(--cream);font-size:2rem;line-height:1.25;margin-bottom:16px;">
-        Order now &amp; get up to<br>
-        <em style="color:var(--gold);font-size:2.6rem;">20% OFF</em><br>
-        with your scratch card!
-      </h2>
-      <p style="color:rgba(253,246,236,.65);font-size:.92rem;line-height:1.7;margin-bottom:8px;">
-        Every order comes with a <strong style="color:var(--gold);">free scratch card</strong>.<br>
-        Win instant discounts — the more you order, the bigger your rewards get.
-      </p>
-      <div style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin:28px 0;">
-        <div style="background:rgba(212,168,83,.12);border:1px solid rgba(212,168,83,.3);border-radius:12px;padding:14px 22px;min-width:130px;">
-          <div style="font-size:1.5rem;font-weight:700;color:var(--gold);">1–10%</div>
-          <div style="font-size:.72rem;color:rgba(253,246,236,.6);margin-top:4px;">Every new order</div>
-        </div>
-        <div style="background:rgba(212,168,83,.12);border:1px solid rgba(212,168,83,.3);border-radius:12px;padding:14px 22px;min-width:130px;">
-          <div style="font-size:1.5rem;font-weight:700;color:var(--gold);">Up to 20%</div>
-          <div style="font-size:.72rem;color:rgba(253,246,236,.6);margin-top:4px;">Loyal customers</div>
-        </div>
-        <div style="background:rgba(212,168,83,.12);border:1px solid rgba(212,168,83,.3);border-radius:12px;padding:14px 22px;min-width:130px;">
-          <div style="font-size:1.5rem;font-weight:700;color:var(--gold);">Min ₹500</div>
-          <div style="font-size:.72rem;color:rgba(253,246,236,.6);margin-top:4px;">To qualify</div>
-        </div>
-      </div>
-      <a href="#" class="order-btn"
-         style="display:inline-block;background:var(--gold);color:var(--dark);font-weight:700;font-size:1rem;padding:16px 40px;border-radius:100px;text-decoration:none;letter-spacing:.04em;box-shadow:0 8px 32px rgba(212,168,83,.4);transition:transform .2s,box-shadow .2s;"
-         onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px rgba(212,168,83,.5)'"
-         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 32px rgba(212,168,83,.4)'">
-        🎰 Order &amp; Scratch Your Discount
-      </a>
-      <p style="color:rgba(253,246,236,.35);font-size:.72rem;margin-top:16px;">Min. purchase ₹500 · Instant discount applied at checkout</p>
-    </div>
-  </section>
-  <style>
-    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.12);} }
-  </style>
 
     <!-- REVIEWS — inline on homepage -->
   <section class="cta-section">
