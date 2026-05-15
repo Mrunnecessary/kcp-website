@@ -21,10 +21,14 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      height: auto;
+    }
     body {
       font-family: "DM Sans", sans-serif;
       background: linear-gradient(160deg, #1a0533 0%, #4a235a 60%, #2C1A0E 100%);
-      min-height: 100vh;
+      min-height: unset;
+      padding-bottom: 40px;
       padding: 24px 16px 48px;
       color: var(--text);
     }
@@ -519,35 +523,8 @@
     <div class="success-box" id="successBox">
       <div style="font-size:2.5rem;margin-bottom:12px;">🎉</div>
       <h3>Order Placed Successfully!</h3>
-
-      <!-- Soft Invoice -->
-      <div id="invoiceBox" style="background:#fff;border:1.5px dashed #D4A853;border-radius:14px;padding:20px;margin:18px 0;text-align:left;font-size:.82rem;line-height:1.9;">
-        <div style="text-align:center;margin-bottom:12px;">
-          <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#2C1A0E;">🍫 Kolkata Cocoa Parlor</div>
-          <div style="font-size:.7rem;color:#8A6347;">Order Confirmation · Soft Invoice</div>
-          <div style="border-top:1px dashed #D4A853;margin:10px 0;"></div>
-        </div>
-        <table style="width:100%;border-collapse:collapse;font-size:.8rem;">
-          <tr><td style="color:#8A6347;padding:2px 0;">Order ID</td><td style="text-align:right;font-weight:600;" id="inv_orderId">—</td></tr>
-          <tr><td style="color:#8A6347;padding:2px 0;">Date</td><td style="text-align:right;" id="inv_date">—</td></tr>
-          <tr><td style="color:#8A6347;padding:2px 0;">Customer</td><td style="text-align:right;" id="inv_name">—</td></tr>
-          <tr><td style="color:#8A6347;padding:2px 0;">Product</td><td style="text-align:right;" id="inv_product">—</td></tr>
-          <tr><td colspan="2"><div style="border-top:1px dashed #D4A853;margin:8px 0;"></div></td></tr>
-          <tr><td style="color:#8A6347;padding:2px 0;">Base Amount</td><td style="text-align:right;" id="inv_base">—</td></tr>
-          <tr id="inv_discRow"><td style="color:#27ae60;padding:2px 0;" id="inv_discLabel">Discount</td><td style="text-align:right;color:#27ae60;" id="inv_disc">—</td></tr>
-          <tr><td colspan="2"><div style="border-top:1px dashed #D4A853;margin:8px 0;"></div></td></tr>
-          <tr>
-            <td style="font-weight:700;color:#2C1A0E;font-size:.9rem;">Final Amount</td>
-            <td style="text-align:right;font-weight:700;color:#2C1A0E;font-size:.9rem;" id="inv_final">—</td>
-          </tr>
-        </table>
-        <div style="border-top:1px dashed #D4A853;margin:10px 0;"></div>
-        <div style="text-align:center;font-size:.7rem;color:#8A6347;">Payment pending verification · Dispatch in 10+ days<br>Keep this Order ID for reference.</div>
-      </div>
-
-      <button onclick="printInvoice()" style="background:var(--cocoa);color:var(--cream);border:none;border-radius:9px;padding:10px 24px;font-size:.82rem;cursor:pointer;margin-bottom:12px;">🖨️ Save / Print Invoice</button>
-
-      <p style="margin-top:4px;font-size:.75rem;color:#555;">
+      <p id="successDetails"></p>
+      <p style="margin-top:10px;font-size:.75rem;color:#555;">
         We'll verify your payment and start preparing your chocolates.<br>
         You'll receive an email when your order is dispatched.
       </p>
@@ -568,7 +545,6 @@
     t.textContent = msg;
     t.className = 'show ' + (type || 'error');
     clearTimeout(toastTimer);
-    // Errors stay longer (5s), success shorter (3.5s)
     var dur = (type === 'error') ? 5000 : 3500;
     toastTimer = setTimeout(function() {
       t.className = t.className.replace('show', '').trim();
@@ -577,9 +553,7 @@
 
 
   function showErr(msg) {
-    // Toast popup — always visible regardless of scroll position
     showToast('⚠ ' + msg, 'error');
-    // Also update banner for reference
     var b = document.getElementById('errBanner');
     if (b) { b.textContent = '⚠ ' + msg; b.style.display = 'block'; b.scrollIntoView({behavior:'smooth', block:'nearest'}); }
   }
@@ -595,10 +569,9 @@
   }
 
   // ── State ────────────────────────────────────────────────
-  var orderResult   = null;
-  var tcChecked     = false;
-  var scratchSetup  = false;
-  var whatsappSent  = false;  // tracks if WhatsApp proof was sent
+  var orderResult  = null;
+  var tcChecked    = false;
+  var scratchSetup = false;
 
   // ── TC toggle ────────────────────────────────────────────
   function toggleTC() {
@@ -687,9 +660,8 @@
     // Loyalty badge
     if (res.loyaltyEligible) {
       document.getElementById('loyaltyBadge').style.display = 'flex';
-      // Loyalty users still must scratch to reveal amount
     }
-    // amountBox and paymentSection stay hidden for ALL users until scratch is revealed
+    // ALL users must scratch to reveal amount
 
     // Scratch card content
     // ONLY rule: loyalty users → BLN (they get 10% loyalty instead)
@@ -820,16 +792,17 @@ function sendViaWhatsApp() {
   var disc     = orderResult ? (orderResult.baseAmount - orderResult.finalAmount) : 0;
   var discLabel= orderResult ? orderResult.discountLabel : '';
 
-  if (!paid) { showToast('Please enter the amount you paid first', 'error'); return; }
+  if (!paid) { showToast('⚠ Please enter the amount you paid first', 'error'); return; }
 
   var msg = '🍫 *Payment Proof — Kolkata Cocoa Parlor*\n\n'
     + '👤 Customer: *' + name + '*\n'
-    + '🆔 Order ID: *' + orderId + '*\n\n'
+    + '🆔 Order ID: *' + orderId + '*\n'
+    + '📅 Date: ' + new Date().toLocaleDateString('en-IN') + '\n\n'
     + '💰 Amount Details:\n'
     + '   Base Amount:  ₹' + base + '\n'
     + (disc > 0
-        ? '   Reward/Discount: -₹' + disc + ' (' + discLabel + ')\n'
-        : '   Discount: No discount this time\n')
+        ? '   Discount: -₹' + disc + ' (' + discLabel + ')\n'
+        : '   Discount: None\n')
     + '   Final Amount: ₹' + finalAmt + '\n'
     + '   Amount Paid:  ₹' + paid + '\n\n'
     + '📸 Screenshot attached below ↓';
@@ -848,7 +821,7 @@ function sendViaWhatsApp() {
     var paid   = document.getElementById('amountPaid').value.trim();
     var ssLink = document.getElementById('ssLink').value.trim();
 
-    if (!paid) { showErr('Please enter the amount you paid'); return; }
+    if (!paid)   { showErr('Please enter the amount you paid'); return; }
     if (!whatsappSent) { showErr('Please send your payment screenshot on WhatsApp first'); return; }
 
     document.getElementById('proofBtn').disabled = true;
@@ -870,7 +843,7 @@ function sendViaWhatsApp() {
   function onProofResult(res) {
     document.getElementById('spinner2').style.display = 'none';
     if (!res.success) {
-      showToast('Error — please contact us on WhatsApp', 'error');
+      showToast('⚠ Error — please contact us on WhatsApp', 'error');
       document.getElementById('proofBtn').disabled = false;
       document.getElementById('proofBtn').textContent = '✅ Submit Payment Proof';
       return;
@@ -880,18 +853,19 @@ function sendViaWhatsApp() {
     document.getElementById('phase2').style.display = 'none';
 
     // Populate invoice
-    var disc = orderResult.baseAmount - orderResult.finalAmount;
-    document.getElementById('inv_orderId').textContent  = orderResult.orderId;
-    document.getElementById('inv_date').textContent     = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-    document.getElementById('inv_name').textContent     = document.getElementById('name').value.trim();
-    document.getElementById('inv_product').textContent  = document.getElementById('product').value.trim();
-    document.getElementById('inv_base').textContent     = '₹' + orderResult.baseAmount;
-    document.getElementById('inv_final').textContent    = '₹' + orderResult.finalAmount;
+    var disc = (orderResult.baseAmount || 0) - (orderResult.finalAmount || 0);
+    var el;
+    el = document.getElementById('inv_orderId'); if(el) el.textContent = orderResult.orderId;
+    el = document.getElementById('inv_date');    if(el) el.textContent = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    el = document.getElementById('inv_name');    if(el) el.textContent = document.getElementById('name').value.trim();
+    el = document.getElementById('inv_product'); if(el) el.textContent = document.getElementById('product').value.trim();
+    el = document.getElementById('inv_base');    if(el) el.textContent = '₹' + orderResult.baseAmount;
+    el = document.getElementById('inv_final');   if(el) el.textContent = '₹' + orderResult.finalAmount;
     if (disc > 0) {
-      document.getElementById('inv_discLabel').textContent = orderResult.discountLabel;
-      document.getElementById('inv_disc').textContent      = '− ₹' + disc;
+      el = document.getElementById('inv_discLabel'); if(el) el.textContent = orderResult.discountLabel;
+      el = document.getElementById('inv_disc');      if(el) el.textContent = '− ₹' + disc;
     } else {
-      document.getElementById('inv_discRow').style.display = 'none';
+      el = document.getElementById('inv_discRow'); if(el) el.style.display = 'none';
     }
 
     var box = document.getElementById('successBox');
@@ -900,9 +874,7 @@ function sendViaWhatsApp() {
     box.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function printInvoice() {
-    window.print();
-  }
+  function printInvoice() { window.print(); }
 </script>
 
 <div id="toast"></div>
