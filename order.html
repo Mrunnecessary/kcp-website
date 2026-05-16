@@ -3,12 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Place Your Order — Kolkata Cocoa Parlor</title>
-  <meta name="description" content="Order handmade chocolates from Kolkata Cocoa Parlor. Pan India delivery. Scratch card discounts on every order.">
-  <!-- ══════════════════════════════════════════════════════
-       KCP ORDER FORM — hosted on kolkatacocoaparlor.com
-       Update KCP_API_URL below when you redeploy Apps Script
-  ══════════════════════════════════════════════════════ -->
+  <title>KCP – Place Your Order</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -357,6 +352,16 @@
     }
     #toast.error { background: #c0392b; }
     #toast.success { background: #27ae60; }
+  
+    @keyframes shake {
+      0%,100%{transform:translateX(0)}
+      20%{transform:translateX(-6px)}
+      40%{transform:translateX(6px)}
+      60%{transform:translateX(-4px)}
+      80%{transform:translateX(4px)}
+    }
+    .tc-label.shake { animation: shake 0.4s ease; }
+
   </style>
 </head>
 <body>
@@ -575,15 +580,15 @@
 
   // ── State ────────────────────────────────────────────────
   var orderResult  = null;
-  var tcChecked    = false;
+  window.tcChecked = false;
   var scratchSetup = false;
 
   // ── TC toggle ────────────────────────────────────────────
-  function toggleTC() {
-    tcChecked = !tcChecked;
-    document.getElementById('tcLabel').classList.toggle('ticked', tcChecked);
-    document.getElementById('tcBox').textContent = tcChecked ? '✓' : '';
-  }
+  window.toggleTC = function() {
+    window.tcChecked = !window.tcChecked;
+    document.getElementById('tcLabel').classList.toggle('ticked', window.tcChecked);
+    document.getElementById('tcBox').textContent = window.tcChecked ? '✓' : '';
+  };
 
   // ── Step indicator ───────────────────────────────────────
   function setStep(n) {
@@ -594,7 +599,7 @@
   }
 
   // ── SUBMIT ORDER ─────────────────────────────────────────
-  function submitOrder() {
+  window.submitOrder = function() {
     var name    = document.getElementById('name').value.trim();
     var phone   = document.getElementById('phone').value.trim();
     // Strip +91, 91, or leading 0 to get the 10-digit number
@@ -611,10 +616,12 @@
     }
     if (!/^\d{10}$/.test(phone)) {
       showFieldErr('phoneErr', 'Enter a valid 10-digit number (without +91)'); showErr('Check your phone number'); return;
-      return;
     }
-    if (!tcChecked) {
-      showErr('Please accept the Terms & Conditions to proceed'); return;
+    if (!window.tcChecked) {
+      showErr('Please accept the Terms & Conditions to proceed');
+      var tcEl = document.getElementById('tcLabel');
+      tcEl.classList.add('shake');
+      setTimeout(function(){ tcEl.classList.remove('shake'); }, 500);
       return;
     }
 
@@ -793,7 +800,7 @@
   }
 
 // ── SEND SCREENSHOT VIA WHATSAPP ─────────────────────────
-function sendViaWhatsApp() {
+window.sendViaWhatsApp = function() {
   var paid     = document.getElementById('amountPaid').value.trim();
   var orderId  = orderResult ? orderResult.orderId : 'UNKNOWN';
   var name     = document.getElementById('name').value.trim();
@@ -827,7 +834,7 @@ function sendViaWhatsApp() {
 }
 
   // ── SUBMIT PROOF ─────────────────────────────────────────
-  function submitProof() {
+  window.submitProof = function() {
     var paid   = document.getElementById('amountPaid').value.trim();
     var ssLink = document.getElementById('ssLink').value.trim();
 
@@ -893,6 +900,24 @@ function sendViaWhatsApp() {
   }
 
   function printInvoice() { window.print(); }
+</script>
+
+<!-- Global functions needed for onclick handlers -->
+<script>
+  // These must be global (outside DOMContentLoaded) to work with onclick attributes
+
+  function toggleTC() {
+    var state = window._kcpTC = !window._kcpTC;
+    document.getElementById('tcLabel').classList.toggle('ticked', state);
+    document.getElementById('tcBox').textContent = state ? '✓' : '';
+    // Update the scoped variable via custom event
+    document.dispatchEvent(new CustomEvent('tc-changed', { detail: state }));
+  }
+
+  window.sendViaWhatsApp = function() { document._kcpSendWA && document._kcpSendWA(); }
+  function submitProof()     { document._kcpSubmitProof && document._kcpSubmitProof(); }
+  function submitOrder()     { document._kcpSubmitOrder && document._kcpSubmitOrder(); }
+  function printInvoice()    { window.print(); }
 </script>
 
 <div id="toast"></div>
