@@ -411,7 +411,7 @@
 
       <div class="fg">
         <label class="fl">Email</label>
-        <input type="email" id="email" placeholder="For order updates (optional)" autocomplete="email">
+        <input type="email" id="email" placeholder="Your email address (required)" autocomplete="email">
       </div>
 
       <div class="fg">
@@ -421,7 +421,13 @@
 
       <div class="fg">
         <label class="fl">Full Delivery Address <span class="req">*</span></label>
-        <textarea id="address" placeholder="House no., street, locality, pin code…" autocomplete="street-address"></textarea>
+        <textarea id="address" placeholder="House no., street, locality…" autocomplete="street-address"></textarea>
+        <span class="ferr" id="addressErr"></span>
+      </div>
+      <div class="field-group half">
+        <label class="fl">Pincode <span class="req">*</span></label>
+        <input type="text" id="pincode" placeholder="6-digit pincode" maxlength="6" inputmode="numeric" autocomplete="postal-code">
+        <span class="ferr" id="pincodeErr"></span>
       </div>
 
       <div class="divider"></div>
@@ -550,7 +556,7 @@
 
   // ── Toast helper (replaces all alert() calls) ────────────
   var toastTimer = null;
-  function showToast(msg, type) {
+  window.showToast = function(msg, type) {
     var t = document.getElementById('toast');
     t.textContent = msg;
     t.className = 'show ' + (type || 'error');
@@ -562,7 +568,7 @@
   }
 
 
-  function showErr(msg) {
+  window.showErr = function(msg) {
     showToast('⚠ ' + msg, 'error');
     var b = document.getElementById('errBanner');
     if (b) { b.textContent = '⚠ ' + msg; b.style.display = 'block'; b.scrollIntoView({behavior:'smooth', block:'nearest'}); }
@@ -606,13 +612,21 @@
     phone = phone.replace(/^\+91/, '').replace(/^91(?=\d{10}$)/, '').replace(/^0/, '');
     var city    = document.getElementById('city').value.trim();
     var address = document.getElementById('address').value.trim();
+    var pincode = document.getElementById('pincode').value.trim();
     var product = document.getElementById('product').value.trim();
     var summary = document.getElementById('orderSummary').value.trim();
+    var email   = document.getElementById('email').value.trim();
     var amount  = document.getElementById('amount').value.trim();
 
-    if (!name || !phone || !city || !address || !product || !amount) {
+    if (!name || !phone || !email || !city || !address || !pincode || !product || !amount) {
       showErr('Please fill in all required fields marked with *'); return;
-      return;
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      showErr('Please enter a valid email address'); return;
+    }
+    if (!/^\d{6}$/.test(pincode)) {
+      showFieldErr('pincodeErr', 'Enter a valid 6-digit pincode');
+      showErr('Please enter a valid 6-digit pincode'); return;
     }
     if (!/^\d{10}$/.test(phone)) {
       showFieldErr('phoneErr', 'Enter a valid 10-digit number (without +91)'); showErr('Check your phone number'); return;
@@ -636,19 +650,22 @@
         email:        document.getElementById('email').value.trim(),
         city:         city,
         address:      address,
+        pincode:      pincode,
         product:      product,
         orderSummary: summary,
         amount:       amount,
         action:       'submitOrder'
       };
-    fetch(https://script.google.com/macros/s/AKfycbzJuDLlKK3eCNNb_ZCFlz9s6ttarsNPt_zJHK_B8DFJ_uUICN8s58DTdiW5IcPbF8r_aA/exec, {
-        method: 'POST',
-        body:   JSON.stringify(payload)
+    var url = 'https://script.google.com/macros/s/AKfycbyhreLu2d4BCsADGk4-1bLAvAP80fXtpa-lx38pr4BllzopZC0NxMM9ErqxvzWnEnxyFA/exec' + '?data=' + encodeURIComponent(JSON.stringify(payload));
+    fetch(url)
+      .then(function(r) {
+        if (!r.ok) throw new Error('Server error: ' + r.status);
+        return r.json();
       })
-      .then(function(r) { return r.json(); })
       .then(function(res) { onOrderResult(res); })
       .catch(function(err) {
-        showToast('Submission error — please try again', 'error');
+        console.error('Fetch error:', err);
+        showToast('⚠ Connection error — please check your internet and try again', 'error');
         document.getElementById('submitBtn').disabled = false;
         document.getElementById('spinner').style.display = 'none';
       });
@@ -845,19 +862,21 @@ window.sendViaWhatsApp = function() {
     document.getElementById('proofBtn').textContent = '⏳ Submitting…';
     document.getElementById('spinner2').style.display = 'block';
 
-    fetch(KCP_API_URL, {
-        method: 'POST',
-        body:   JSON.stringify({
-          action:   'submitPaymentProof',
-          orderId:  orderResult.orderId,
-          ssLink:   ssLink,
-          paid:     paid
-        })
+    var proofUrl = 'https://script.google.com/macros/s/AKfycbyhreLu2d4BCsADGk4-1bLAvAP80fXtpa-lx38pr4BllzopZC0NxMM9ErqxvzWnEnxyFA/exec' + '?data=' + encodeURIComponent(JSON.stringify({
+        action:   'submitPaymentProof',
+        orderId:  orderResult.orderId,
+        ssLink:   ssLink,
+        paid:     paid
+      }));
+    fetch(proofUrl)
+      .then(function(r) {
+        if (!r.ok) throw new Error('Server error: ' + r.status);
+        return r.json();
       })
-      .then(function(r) { return r.json(); })
       .then(function(res) { onProofResult(res); })
       .catch(function(err) {
-        showToast('Submission error — please try again', 'error');
+        console.error('Fetch error:', err);
+        showToast('⚠ Connection error — please try again', 'error');
         document.getElementById('proofBtn').disabled = false;
         document.getElementById('proofBtn').textContent = '✅ Submit Payment Proof';
         document.getElementById('spinner2').style.display = 'none';
