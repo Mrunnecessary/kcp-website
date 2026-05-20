@@ -921,23 +921,8 @@ window.sendViaWhatsApp = function() {
   function printInvoice() { window.print(); }
 </script>
 
-<!-- Global functions needed for onclick handlers -->
-<script>
-  // These must be global (outside DOMContentLoaded) to work with onclick attributes
-
-  function toggleTC() {
-    var state = window._kcpTC = !window._kcpTC;
-    document.getElementById('tcLabel').classList.toggle('ticked', state);
-    document.getElementById('tcBox').textContent = state ? '✓' : '';
-    // Update the scoped variable via custom event
-    document.dispatchEvent(new CustomEvent('tc-changed', { detail: state }));
-  }
-
-  window.sendViaWhatsApp = function() { document._kcpSendWA && document._kcpSendWA(); }
-  function submitProof()     { document._kcpSubmitProof && document._kcpSubmitProof(); }
-  function submitOrder()     { document._kcpSubmitOrder && document._kcpSubmitOrder(); }
-  function printInvoice()    { window.print(); }
-</script>
+<!-- Note: submitOrder, submitProof, sendViaWhatsApp, toggleTC, printInvoice
+     are all defined as window.* inside the main script block above. No stubs needed. -->
 
 <div id="toast"></div>
 </body>
