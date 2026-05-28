@@ -585,6 +585,7 @@
         We'll verify your payment and start preparing your chocolates.<br>
         You'll receive an email when your order is dispatched.
       </p>
+      <p id="inv_payNote" style="display:none;background:#fef3cd;border:1px solid #f0c040;border-radius:8px;padding:10px;font-size:.78rem;color:#7d5a00;margin-top:8px;text-align:left;"></p>
       <button onclick="printInvoice()" style="margin-top:10px;background:var(--cocoa);color:#fff;border:none;padding:8px 20px;border-radius:100px;font-size:.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;">🖨 Save / Print Receipt</button>
       <p style="margin-top:12px;">
         <a href="https://www.kolkatacocoaparlor.com" style="color:var(--milk);font-size:.8rem;">← Back to KolkataCocoaParlor.com</a>
@@ -976,7 +977,23 @@ window.sendViaWhatsApp = function() {
     el = document.getElementById('inv_name');    if(el) el.textContent = document.getElementById('name').value.trim();
     el = document.getElementById('inv_product'); if(el) el.textContent = document.getElementById('product').value.trim();
     el = document.getElementById('inv_base');    if(el) el.textContent = '₹' + orderResult.baseAmount;
-    el = document.getElementById('inv_final');   if(el) el.textContent = '₹' + orderResult.finalAmount;
+    // Use actual amount paid by customer, not the quoted amount
+    var actualPaid = document.getElementById('amountPaid').value.trim();
+    var quotedFinal = orderResult.finalAmount;
+    el = document.getElementById('inv_final');
+    if(el) {
+      el.textContent = '₹' + (actualPaid || quotedFinal);
+      // Show warning if customer paid different amount
+      if (actualPaid && parseInt(actualPaid) !== parseInt(quotedFinal)) {
+        el.innerHTML = '₹' + actualPaid + ' <span style="color:#e67e22;font-size:.75rem;font-weight:600;">(quoted ₹' + quotedFinal + ')</span>';
+        // Also add a note below invoice
+        var noteEl = document.getElementById('inv_payNote');
+        if (noteEl) {
+          noteEl.style.display = 'block';
+          noteEl.textContent = '⚠ Amount paid (₹' + actualPaid + ') differs from quoted price (₹' + quotedFinal + '). We will verify and contact you if needed.';
+        }
+      }
+    }
     if (disc > 0) {
       el = document.getElementById('inv_discLabel'); if(el) el.textContent = orderResult.discountLabel;
       el = document.getElementById('inv_disc');      if(el) el.textContent = '− ₹' + disc;
